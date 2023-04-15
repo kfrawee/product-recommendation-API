@@ -39,5 +39,4 @@ class Invocation(db.Model, TimestampMixin):
             "updated_on": self.updated_on,
             "predictions": self.predictions,
             "payload": self.payload,
-            "error": self.error,
         }

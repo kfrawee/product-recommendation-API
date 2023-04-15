@@ -18,11 +18,11 @@ What this model solves relates to a sub-product of Genify. It helps banks recomm
 ## How to run:
 - Clone the repository:
     ```sh
-    $ git clone https://github.com/kfrawee/product-recommendation-API
+    git clone https://github.com/kfrawee/product-recommendation-API
     ```
 - Install requirements:
     ```sh
-    $ pip install -r requirements.txt
+    pip install -r requirements.txt
     ```
 
 - Train the model:
@@ -31,29 +31,29 @@ What this model solves relates to a sub-product of Genify. It helps banks recomm
     - Run `train.py` to train and save the trained model to `output` directory.
 - Run the server:
     ```sh
-    $ python run.py
+    python run.py
     ```
 - Import Postman collection from `docs` directory to test the API.
 - View the OpenAPI specefications by importing the swagger file under `docs` directory using [swagger editor](https://editor-next.swagger.io/).
-- **NOTE:*** Some endpoints are protected ( i.e. `DELETE /predict/<invocation_id>`, `GET /predict/`)
+- **NOTE:** Some endpoints are protected ( i.e. `DELETE /predict/<invocation_id>`, `GET /predict/`)
     - To create an Admin user and get a Bearer token, run:
         ```sh
-        $ sh scripts/get-token-dev.sh
+        sh scripts/get-token-dev.sh
         ```
     - Add the token to the request headers.
 
 You can use Docker Container:
 - Build:
     ```sh
-    $ docker build -t genify-api .
+    docker build -t genify-api .
     ```
 - Run:
     ```sh
-    $ docker run -d -p 8080:8080 genify-api
+    docker run -d -p 8080:8080 genify-api
     ```
 - Or run:
     ```sh
-    $ sh scripts/build-run-image.sh
+    sh scripts/build-run-image.sh
     ```
 
 ---

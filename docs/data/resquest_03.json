@@ -1,0 +1,11 @@
+{
+    "age": 58,
+    "gender": "MALE",
+    "country_code": "ES",
+    "city": "MADRID",
+    "seniority": 240,
+    "segment": "VIP",
+    "relationship_type": "ACTIVE",
+    "activity_level": "ACTIVE",
+    "income": 120000
+}
