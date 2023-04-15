@@ -20,6 +20,11 @@ What this model solves relates to a sub-product of Genify. It helps banks recomm
     ```sh
     $ git clone https://github.com/kfrawee/product-recommendation-API
     ```
+- Install requirements:
+    ```sh
+    $ pip install -r requirements.txt
+    ```
+
 - Train the model:
     - Navigate to `app\api\ml_models`.
     - After downloading and extracting the data to `data` directory. *Check `README.md` for guidance*

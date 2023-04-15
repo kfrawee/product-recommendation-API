@@ -16,12 +16,19 @@ from app import db
 from app.api.db_models import Invocation
 from app.api.db_models.db_mixins import InvocationStatus
 from app.api.ml_models import load_model, processData, target_cols
-from app.api.views import (BASE_USER_DATA_TEMPLATE, INPUT_MAPPING,
-                           PRODUCTS_MAPPINGS, USER_ACTIVITY_MAPPING,
-                           USER_GENDER_MAPPING, USER_RELATIONSHIP_MAPPING,
-                           USER_SEGMENT_MAPPING, CreatePredictSchema,
-                           PredictResponseSchema, convert_values_to_string,
-                           translate_keys_or_values)
+from app.api.views import (
+    BASE_USER_DATA_TEMPLATE,
+    INPUT_MAPPING,
+    PRODUCTS_MAPPINGS,
+    USER_ACTIVITY_MAPPING,
+    USER_GENDER_MAPPING,
+    USER_RELATIONSHIP_MAPPING,
+    USER_SEGMENT_MAPPING,
+    CreatePredictSchema,
+    PredictResponseSchema,
+    convert_values_to_string,
+    translate_keys_or_values,
+)
 
 logger = logging.getLogger(__name__)
 model = load_model()
@@ -65,7 +72,7 @@ def prepare_data(data: Dict) -> Dict:
 
 
 class PredictAPIView(BaseApi):
-    base_route = "predict"
+    resource_name = "predict"
 
     @expose("/", methods=["POST"])
     def post_predict_handler(self, *args, **kwargs):
@@ -81,7 +88,6 @@ class PredictAPIView(BaseApi):
             )
 
         logger.debug(f"Received valid data: {data}")
-
 
         try:
             # create invocation record
@@ -129,18 +135,16 @@ class PredictAPIView(BaseApi):
             invocation.predictions = final_predictions
             db.session.commit()
 
-            return predict_response_schema.dump(invocation.to_json()), HTTPStatus.OK
+            response_body = predict_response_schema.dump(invocation.to_json())
+            response_body.pop("payload", None)
+            response_body.pop("error", None)
+            response_body.update(
+                _links={"details": f"{request.base_url}/{invocation_id}"}
+            )
+            return response_body, HTTPStatus.OK
         except Exception as e:
-            import traceback
-
-            invocation.invocation_status = InvocationStatus.FAILED
-            invocation.error = {"error": str(e), "traceback": traceback.format_exc()}
-            db.session.commit()
-
             logger.exception(f"Error in predict handler: {str(e)}")
-            return {
-                "error": "Internal Server Error",
-            }, HTTPStatus.INTERNAL_SERVER_ERROR
+            return {"error": "Internal Server Error"}, HTTPStatus.INTERNAL_SERVER_ERROR
 
     @expose("/<invocation_id>", methods=["GET"])
     def get_predict_handler(self, *args, **kwargs):
@@ -152,6 +156,7 @@ class PredictAPIView(BaseApi):
             query = query.filter(Invocation.invocation_id == invocation_id)
             invocation = query.one_or_none()
             if invocation is None:
+                logger.debug(f"Invocation {invocation_id} not found")
                 return {
                     "error": f"Invocation {invocation_id} not found"
                 }, HTTPStatus.NOT_FOUND
@@ -173,6 +178,7 @@ class PredictAPIView(BaseApi):
             query = query.filter(Invocation.invocation_id == invocation_id)
             invocation = query.one_or_none()
             if invocation is None:
+                logger.debug(f"Invocation {invocation_id} not found")
                 return {
                     "error": f"Invocation {invocation_id} not found"
                 }, HTTPStatus.NOT_FOUND
@@ -187,6 +193,7 @@ class PredictAPIView(BaseApi):
             return {"error": "Internal Server Error"}, HTTPStatus.INTERNAL_SERVER_ERROR
 
     @expose("/", methods=["GET"])
+    @protect()
     def list_predict_handler(self, *args, **kwargs):
         try:
             session = db.session

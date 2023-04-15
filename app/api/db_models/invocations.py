@@ -12,7 +12,9 @@ class Invocation(db.Model, TimestampMixin):
     __tablename__ = "invocation"
 
     invocation_id = db.Column(
-        db.String(26), primary_key=True, default=lambda: str(ulid.from_timestamp(datetime.now(timezone.utc)))
+        db.String(26),
+        primary_key=True,
+        default=lambda: str(ulid.from_timestamp(datetime.now(timezone.utc))),
     )
     invocation_status = db.Column(db.Enum(InvocationStatus), nullable=True)
     predictions = db.Column(
