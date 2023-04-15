@@ -1,17 +1,13 @@
-import datetime
-
-from app.api.db_models import db
-from config import get_config, get_env
-import json
 import logging
+from http import HTTPStatus
 from logging.config import dictConfig
 
-from http import HTTPStatus
 from flask import Flask
-
 from flask_appbuilder import AppBuilder
 from flask_cors import CORS
 
+from app.api.db_models import db
+from config import get_config, get_env
 
 stage = get_env() == "STAGE"
 prod = get_env() == "PROD"
@@ -91,7 +87,6 @@ def register_routes(app, db):
 configure_logging()
 
 app = register_app()
-deploy_time = datetime.datetime.now()
 db.init_app(app)
 
 with app.app_context():

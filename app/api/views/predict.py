@@ -1,9 +1,10 @@
 import logging
+from datetime import datetime, timezone
 from http import HTTPStatus
 from typing import Dict
-from uuid import uuid4
 
 import numpy as np
+import ulid
 import xgboost as xgb
 from flask import request
 from flask_appbuilder import expose
@@ -88,17 +89,16 @@ class PredictAPIView(BaseApi):
 
         logger.debug(f"Received valid data: {data}")
 
-        # create invocation record
-        invocation_id = str(uuid4())
-        invocation = Invocation(
-            invocation_id=invocation_id,
-            invocation_status=InvocationStatus.STARTED,
-            payload=data,
-        )
-        db.session.add(invocation)
-        db.session.commit()
-
         try:
+            # create invocation record
+            invocation_id = str(ulid.from_timestamp(datetime.now(timezone.utc)))
+            invocation = Invocation(
+                invocation_id=invocation_id,
+                invocation_status=InvocationStatus.STARTED,
+                payload=data,
+            )
+            db.session.add(invocation)
+            db.session.commit()
             prepared_data = prepare_data(data)
             logger.debug(f"Prepared data: {prepared_data}")
 
@@ -135,18 +135,16 @@ class PredictAPIView(BaseApi):
             invocation.predictions = final_predictions
             db.session.commit()
 
-            return predict_response_schema.dump(invocation.to_json()), HTTPStatus.OK
+            response_body = predict_response_schema.dump(invocation.to_json())
+            response_body.pop("payload", None)
+            response_body.pop("error", None)
+            response_body.update(
+                _links={"details": f"{request.base_url}/{invocation_id}"}
+            )
+            return response_body, HTTPStatus.OK
         except Exception as e:
-            import traceback
-
-            invocation.invocation_status = InvocationStatus.FAILED
-            invocation.error = {"error": str(e), "traceback": traceback.format_exc()}
-            db.session.commit()
-
             logger.exception(f"Error in predict handler: {str(e)}")
-            return {
-                "error": "Internal Server Error",
-            }, HTTPStatus.INTERNAL_SERVER_ERROR
+            return {"error": "Internal Server Error"}, HTTPStatus.INTERNAL_SERVER_ERROR
 
     @expose("/<invocation_id>", methods=["GET"])
     def get_predict_handler(self, *args, **kwargs):
@@ -158,6 +156,7 @@ class PredictAPIView(BaseApi):
             query = query.filter(Invocation.invocation_id == invocation_id)
             invocation = query.one_or_none()
             if invocation is None:
+                logger.debug(f"Invocation {invocation_id} not found")
                 return {
                     "error": f"Invocation {invocation_id} not found"
                 }, HTTPStatus.NOT_FOUND
@@ -179,6 +178,7 @@ class PredictAPIView(BaseApi):
             query = query.filter(Invocation.invocation_id == invocation_id)
             invocation = query.one_or_none()
             if invocation is None:
+                logger.debug(f"Invocation {invocation_id} not found")
                 return {
                     "error": f"Invocation {invocation_id} not found"
                 }, HTTPStatus.NOT_FOUND
@@ -193,6 +193,7 @@ class PredictAPIView(BaseApi):
             return {"error": "Internal Server Error"}, HTTPStatus.INTERNAL_SERVER_ERROR
 
     @expose("/", methods=["GET"])
+    @protect()
     def list_predict_handler(self, *args, **kwargs):
         try:
             session = db.session
