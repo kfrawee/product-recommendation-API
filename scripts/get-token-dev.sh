@@ -12,9 +12,13 @@ response=$(curl -sSf -X POST \
   -H 'cache-control: no-cache' \
   -H 'content-type: application/json' \
   -d '{"username": "admin" ,"password": "admin", "provider": "db"}')
-if [[ $response == *"Unauthorized"* ]]; then
-  echo "Admin user is not created"
-  # Create admin user
+
+# echo new line
+echo ""
+if ! echo $response | grep -qE '^{.*}$'; then
+  echo "Admin user was not created"
+  echo ""
+  echo "Create admin user"
   export FLASK_APP=app
   flask fab create-admin
 fi

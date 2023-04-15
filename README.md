@@ -33,24 +33,39 @@ What this model solves relates to a sub-product of Genify. It helps banks recomm
     ```sh
     $ python run.py
     ```
-- Import Postman collection to test the API.
-- Some endpoints are protected ( i.e. `DELETE /predict/<invocation_id>` )
+- Import Postman collection from `docs` directory to test the API.
+- View the OpenAPI specefications by importing the swagger file under `docs` directory using [swagger editor](https://editor-next.swagger.io/).
+- **NOTE:*** Some endpoints are protected ( i.e. `DELETE /predict/<invocation_id>`, `GET /predict/`)
     - To create an Admin user and get a Bearer token, run:
         ```sh
         $ sh scripts/get-token-dev.sh
         ```
     - Add the token to the request headers.
 
-Or using Docker Container:
+You can use Docker Container:
 - Build:
     ```sh
     $ docker build -t genify-api .
     ```
 - Run:
     ```sh
-    $ docker run -p 8080:8080 genify-api
+    $ docker run -d -p 8080:8080 genify-api
     ```
 - Or run:
     ```sh
     $ sh scripts/build-run-image.sh
     ```
+
+---
+## References
+[1] overview of problem (Kaggle competition): [https://www.kaggle.com/c/santander-product-recommendation/overview](https://www.kaggle.com/c/santander-product-recommendation/overview)
+
+[2] data (Kaggle competition): [https://www.kaggle.com/c/santander-product-recommendation/data](https://www.kaggle.com/c/santander-product-recommendation/data)
+
+[3] reference Kaggle notebook: [https://www.kaggle.com/sudalairajkumar/when-less-is-more](https://www.kaggle.com/sudalairajkumar/when-less-is-more)
+
+[4] details on ref. code: [https://www.kaggle.com/c/santander-product-recommendation/discussion/25579](https://www.kaggle.com/c/santander-product-recommendation/discussion/25579)
+
+[5] Genify recommender system demo: [https://web.archive.org/web/20220524164933/https://jpweng.pythonanywhere.com/en/recosysdemo](https://web.archive.org/web/20220524164933/https://jpweng.pythonanywhere.com/en/recosysdemo)
+
+[6] Genify PFM API: [https://docs.pfm.genify.ai/pfm-suite/v1/transaction-data-api](https://docs.pfm.genify.ai/pfm-suite/v1/transaction-data-api)

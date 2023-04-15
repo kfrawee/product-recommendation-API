@@ -27,11 +27,6 @@ class Invocation(db.Model, TimestampMixin):
         nullable=False,
         comment="JSON representation of the payload",
     )
-    error = db.Column(
-        db.JSON,
-        nullable=True,
-        comment="JSON representation of the error",
-    )
 
     def __repr__(self):
         return f"<Invocation {self.invocation_id}>"
