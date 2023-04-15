@@ -12,60 +12,9 @@ from flask import Flask
 from flask_appbuilder import AppBuilder
 from flask_cors import CORS
 
-# from flask_migrate import Migrate
-# from app.api.constants.keys import LARK_STAGE_ERROR_WEBHOOK_URL, LARK_PROD_ERROR_WEBHOOK_URL
-
-
-# import requests
-
-# redis_connection = None  # TODO: Remove redis with chat
-# migrate = Migrate()
 
 stage = get_env() == "STAGE"
 prod = get_env() == "PROD"
-
-# TODO: Implement a better way to skip the error logging
-# ERRORS_TO_IGNORE = [
-#     "Need to login",
-#     "No user found with this email, please sign up.",
-#     "No user found for this account",
-#     "Invalid invitation code",
-#     "No booking information found",
-# ]
-
-
-# class HTTPSStageLarkHandler(logging.Handler):
-#     def emit(self, record):
-#         if isinstance(record.msg, str):
-#             for err in ERRORS_TO_IGNORE:
-#                 if err in record.msg:
-#                     return
-#         lark_data = {"msg_type": "text", "content": {"text": self.format(record)}}
-#         response = requests.post(
-#             LARK_STAGE_ERROR_WEBHOOK_URL, data=json.dumps(lark_data), headers={"Content-Type": "application/json"}
-#         )
-#         if response.status_code != 200:
-#             raise ValueError(
-#                 "Request to lark returned an error %s, the response is:\n%s" % (response.status_code, response.text)
-#             )
-#         return response
-
-
-# class HTTPSProdLarkHandler(logging.Handler):
-#     def emit(self, record):
-#         if isinstance(record.msg, str):
-#             for err in ERRORS_TO_IGNORE:
-#                 if err in record.msg:
-#                     return
-#         lark_data = {"msg_type": "text", "content": {"text": self.format(record)}}
-#         response = requests.post(
-#             LARK_PROD_ERROR_WEBHOOK_URL, data=json.dumps(lark_data), headers={"Content-Type": "application/json"}
-#         )
-#         if response.status_code != 200:
-#             raise ValueError(
-#                 "Request to lark returned an error %s, the response is:\n%s" % (response.status_code, response.text)
-#             )
-#         return response
 
 
 def configure_logging():
@@ -75,7 +24,7 @@ def configure_logging():
     config = get_config()["LOGGING"]
     level = config.get("level", "DEBUG")
     format_ = config.get(
-        "format", "%(asctime)s:%(levelname)s in %(module)s:%(message)s"
+        "format", "%%(asctime)s:%%(levelname)s:%%(name)s:%%(lineno)d:%%(message)s"
     )
     dictConfig(
         {
@@ -86,7 +35,7 @@ def configure_logging():
             },
             "handlers": {
                 "console": {
-                    "level": "INFO",
+                    "level": "DEBUG",
                     "class": "logging.StreamHandler",
                     "formatter": "default",
                     "stream": "ext://sys.stdout",

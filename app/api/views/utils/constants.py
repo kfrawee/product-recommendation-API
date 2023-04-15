@@ -29,15 +29,22 @@ INPUT_MAPPING = {
     "pais_residencia": "country_code",
     "nomprov": "city",
     "antiguedad": "seniority",
-    "segmento": "relationship_type",
-    "ind_actividad_cliente": "activity_level",
     "segmento": "segment",
+    "tiprel_1mes": "relationship_type",
+    "ind_actividad_cliente": "activity_level",
     "renta": "income",
 }
 
 USER_ACTIVITY_MAPPING = {
-    "INACTIVE": 0,
-    "ACTIVE": 1,
+    0: "INACTIVE",
+    1: "ACTIVE",
+}
+
+USER_RELATIONSHIP_MAPPING = {
+    "A": "ACTIVE",
+    "I": "INACTIVE",
+    "P": "POTENTIAL",
+    "R": "POTENTIAL",
 }
 
 USER_SEGMENT_MAPPING = {
@@ -49,4 +56,32 @@ USER_SEGMENT_MAPPING = {
 USER_GENDER_MAPPING = {
     "H": "MALE",
     "V": "FEMALE",
+}
+
+
+BASE_USER_DATA_TEMPLATE = {
+    "fecha_dato": "2016-06-28",
+    "ncodpers": "15889",
+    "ind_empleado": "F",
+    "pais_residencia": "ES",
+    "sexo": "V",
+    "age": "56",
+    "fecha_alta": "1995-01-16",
+    "ind_nuevo": "0",
+    "antiguedad": "256",
+    "indrel": "1",
+    "ult_fec_cli_1t": "",
+    "indrel_1mes": "1",
+    "tiprel_1mes": "A",
+    "indresi": "S",
+    "indext": "N",
+    "conyuemp": "N",
+    "canal_entrada": "KAT",
+    "indfall": "N",
+    "tipodom": "1",
+    "cod_prov": "28",
+    "nomprov": "MADRID",
+    "ind_actividad_cliente": "1",
+    "renta": "326124.9",
+    "segmento": "01 - TOP",
 }

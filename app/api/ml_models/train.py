@@ -432,10 +432,11 @@ def getRent(row):
     return round((rent - min_value) / range_value, 6)
 
 
-def processData(in_file_name, cust_dict):
+def processData(in_file_name, cust_dict, data_input=False):
     x_vars_list = []
     y_vars_list = []
-    for row in csv.DictReader(in_file_name):
+    data = in_file_name if data_input else csv.DictReader(in_file_name)
+    for row in data:
         # use only the four months as specified by breakfastpirate #
         if row["fecha_dato"] not in [
             "2015-05-28",
