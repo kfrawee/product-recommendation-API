@@ -1,0 +1,382 @@
+openapi: 3.0.3
+info:
+  title: Product Recommendation API 🏦
+  description: A simple REST API around a machine learning model that recommends banking productsRekognition on the back-end.
+  version: 1.0.0
+  contact:
+    name: kfrawee
+    url: https://github.com/kfrawee
+servers:
+  - url: http://127.0.0.1:8080/api/v1
+paths:
+  /predict:
+    post:
+      summary: Create prediction based on request body.
+      tags:
+        - Prediction
+      operationId: createPrediction
+      requestBody:
+        description: Request Body.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                age:
+                  description: User's age 
+                  type: integer
+                  example: 20
+                gender:
+                  description: User's gender 
+                  type: string
+                  enum: 
+                    - MALE
+                    - FEMALE
+                  example: FEMALE
+                country_code:
+                  description: User's country code
+                  type: string
+                  example: ES
+                city:
+                  description: User's city name
+                  type: string
+                  example: MADRID
+                seniority:
+                  description: User's seniority (in months)
+                  type: integer
+                  example: 120
+                segment:
+                  description: User's segmentation
+                  type: string
+                  enum: 
+                    - VIP
+                    - INDIVIDUAL
+                    - UNIVERSITY
+                  example: INDIVIDUAL
+                relationship_type:
+                  description: User's relationship type
+                  type: string
+                  enum: 
+                    - ACTIVE
+                    - INACTIVE
+                    - FORMER CUSTOMER
+                    - POTENTIAL
+                  example: POTENTIAL
+                activity_level:
+                  description: User's activity level
+                  type: string
+                  enum: 
+                    - ACTIVE
+                    - INACTIVE
+                  example: ACTIVE
+                income:
+                  description: User's income
+                  type: number
+                  example: 60000
+
+            example:
+                {
+                  "age": 23,
+                  "gender": "MALE",
+                  "country_code": "EG",
+                  "city": "CAIRO",
+                  "seniority": 10,
+                  "segment": "INDIVIDUAL",
+                  "relationship_type": "POTENTIAL",
+                  "activity_level": "INACTIVE",
+                  "income": 44000
+              }
+      responses:
+        "200":
+          description: Prediction created successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  invocation_id:
+                    description: The invocation id.
+                    type: string
+                    format: uuid
+                    example: 01GEJ202KZ7PEBZ36X401352AE
+                  invocation_status:
+                    description: Represents current invocation status.
+                    type: string
+                    enum:
+                      - RUNNING
+                      - IN_PROGRESS
+                      - COMPLETED
+                      - FAILED
+                    example: COMPLETED
+                  created_on:
+                    description: Invocation initiation timestamp.
+                    type: string
+                    format: datetime
+                    example: 2022-10-04 17:51:46.815566+00:00
+                  updated_on:
+                    description: Invocation update timestamp.
+                    type: string
+                    format: datetime
+                    example: 2022-10-04 17:51:46.815566+00:00
+                  predictions:
+                    description: Invocation predictions.
+                    type: array
+                    items: 
+                      description: prediction items.
+                      type: string
+                      example: Payroll
+                  _links:
+                    type: object
+                    description: An object contains useful links of the invocation. i.e., retrieve invocation details.
+              example:
+                {
+                  "_links": {
+                      "details": "http://127.0.0.1:8080/api/v1/predict/01GY38B8AZS2VCW75VKA5726YA"
+                  },
+                  "created_on": "2023-04-15 20:05:17.288399",
+                  "invocation_id": "01GY38B8AZS2VCW75VKA5726YA",
+                  "invocation_status": "COMPLETED",
+                  "predictions": [
+                      "Current Accounts",
+                      "Direct Debit",
+                      "Pensions",
+                      "Payroll Account",
+                      "Payroll",
+                      "E-Account",
+                      "Taxes"
+                  ],
+                  "updated_on": "2023-04-15 20:05:17.359271"
+                }
+
+        "500":
+          $ref: "#/components/responses/500InternalServerError"
+
+    get:
+      summary: Get all predictions.
+      tags:
+        - Prediction
+      security:
+        - bearerAuth: []
+      operationId: getPredictions
+
+      responses:
+        "200":
+          description: List of all created predictions.
+          content:
+            application/json:
+              schema:
+                count:
+                  description: Length of invocations.
+                  type: integer
+                  example: 2
+                invocations:
+                  description: List of invocations.
+                  type: array
+                  items: 
+                    type: object
+                    properties:
+                      invocation_id:
+                        description: The invocation id.
+                        type: string
+                        format: uuid
+                        example: 01GEJ202KZ7PEBZ36X401352AE
+                      invocation_status:
+                        description: Represents current invocation status.
+                        type: string
+                        enum:
+                          - RUNNING
+                          - IN_PROGRESS
+                          - COMPLETED
+                          - FAILED
+                        example: COMPLETED
+                      created_on:
+                        description: Invocation initiation timestamp.
+                        type: string
+                        format: datetime
+                        example: 2022-10-04 17:51:46.815566+00:00
+                      updated_on:
+                        description: Invocation update timestamp.
+                        type: string
+                        format: datetime
+                        example: 2022-10-04 17:51:46.815566+00:00
+                      predictions:
+                        description: Invocation predictions.
+                        type: array
+                        items: 
+                          description: prediction items.
+                          type: string
+                          example: Payroll
+                      _links:
+                        type: object
+                        description: An object contains useful links of the invocation. i.e., retrieve invocation details.
+                
+
+        "500":
+          $ref: "#/components/responses/500InternalServerError"
+  
+  /predict/{invocation_id}:
+    get:
+      summary: Retrieve invocation details by `invocation_id`
+      operationId: retrivePredictionDetails
+      tags:
+        - Prediction
+      parameters:
+        - name: invocation_id
+          in: path
+          required: true
+          description: The invocation_id to retrieve details.
+          schema:
+            type: string
+            format: ulid
+            example: 01GEJ56WD2GGG7YJVAK5B7GD4F
+
+      responses:
+        "200":
+          description: OK.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  invocation_id:
+                    description: The invocation id.
+                    type: string
+                    format: uuid
+                    example: 01GEJ202KZ7PEBZ36X401352AE
+                  invocation_status:
+                    description: Represents current invocation status.
+                    type: string
+                    enum:
+                      - RUNNING
+                      - IN_PROGRESS
+                      - COMPLETED
+                      - FAILED
+                    example: COMPLETED
+                  created_on:
+                    description: Invocation initiation timestamp.
+                    type: string
+                    format: datetime
+                    example: 2022-10-04 17:51:46.815566+00:00
+                  updated_on:
+                    description: Invocation update timestamp.
+                    type: string
+                    format: datetime
+                    example: 2022-10-04 17:51:46.815566+00:00
+                  payload:
+                    description: Original Invocation payload.
+                    type: object
+                  predictions:
+                    description: Invocation predictions.
+                    type: array
+                    items: 
+                      description: prediction items.
+                      type: string
+                      example: Payroll
+                  _links:
+                    type: object
+                    description: An object contains useful links of the invocation. i.e., retrieve invocation details.
+              example:
+                {
+                  "created_on": "2023-04-15 20:05:17.288399",
+                  "error": null,
+                  "invocation_id": "01GY38B8AZS2VCW75VKA5726YA",
+                  "invocation_status": "COMPLETED",
+                  "payload": {
+                      "activity_level": "INACTIVE",
+                      "age": 23,
+                      "city": "CAIRO",
+                      "country_code": "EG",
+                      "gender": "MALE",
+                      "income": 34000.0,
+                      "relationship_type": "ACTIVE",
+                      "segment": "INDIVIDUAL",
+                      "seniority": 10
+                  },
+                  "predictions": [
+                      "Current Accounts",
+                      "Direct Debit",
+                      "Pensions",
+                      "Payroll Account",
+                      "Payroll",
+                      "E-Account",
+                      "Taxes"
+                  ],
+                  "updated_on": "2023-04-15 20:05:17.359271"
+                }
+
+        "404":
+          description: Invocation was not found.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Message.
+              example:
+                message: "Invocation with the blob_id '01GEJ5ZBDBM44797PEZVQBXE5X' was not found."
+
+        "500":
+          $ref: "#/components/responses/500InternalServerError"
+    delete:
+      summary: Delete invocation record by `invocation_id`
+      operationId: deletePredictionDetails
+      tags:
+        - Prediction
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: invocation_id
+          in: path
+          required: true
+          description: The invocation_id to delete.
+          schema:
+            type: string
+            format: ulid
+            example: 01GEJ56WD2GGG7YJVAK5B7GD4F
+
+      responses:
+        "204":
+          description: Deleted.
+          
+
+        "404":
+          description: Invocation was not found.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Message.
+              example:
+                message: "Invocation with the blob_id '01GEJ5ZBDBM44797PEZVQBXE5X' was not found."
+
+        "500":
+          $ref: "#/components/responses/500InternalServerError"
+
+components:
+  responses:
+    500InternalServerError:
+      description: Internal Server Error.
+      content:
+        application/json:
+          schema:
+            type: object
+            description: Error response object.
+            properties:
+              message:
+                type: string
+                description: Error message.
+          example:
+            message: "Internal Server Error"
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+# security:
+  # - bearerAuth: []

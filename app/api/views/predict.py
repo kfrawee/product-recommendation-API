@@ -83,7 +83,7 @@ class PredictAPIView(BaseApi):
         except ValidationError as err:
             logger.warning(f"Received invalid data: {data}")
             return (
-                {"error": err.messages},
+                {"message": err.messages},
                 HTTPStatus.BAD_REQUEST,
             )
 
@@ -144,7 +144,9 @@ class PredictAPIView(BaseApi):
             return response_body, HTTPStatus.OK
         except Exception as e:
             logger.exception(f"Error in predict handler: {str(e)}")
-            return {"error": "Internal Server Error"}, HTTPStatus.INTERNAL_SERVER_ERROR
+            return {
+                "message": "Internal Server Error"
+            }, HTTPStatus.INTERNAL_SERVER_ERROR
 
     @expose("/<invocation_id>", methods=["GET"])
     def get_predict_handler(self, *args, **kwargs):
@@ -158,14 +160,16 @@ class PredictAPIView(BaseApi):
             if invocation is None:
                 logger.debug(f"Invocation {invocation_id} not found")
                 return {
-                    "error": f"Invocation {invocation_id} not found"
+                    "message": f"Invocation {invocation_id} not found"
                 }, HTTPStatus.NOT_FOUND
 
             logger.debug(f"Found invocation: {invocation}")
             return predict_response_schema.dump(invocation.to_json()), HTTPStatus.OK
         except Exception as e:
             logger.exception(f"Error in get handler: {str(e)}")
-            return {"error": "Internal Server Error"}, HTTPStatus.INTERNAL_SERVER_ERROR
+            return {
+                "message": "Internal Server Error"
+            }, HTTPStatus.INTERNAL_SERVER_ERROR
 
     @expose("/<invocation_id>", methods=["DELETE"])
     @protect()
@@ -180,7 +184,7 @@ class PredictAPIView(BaseApi):
             if invocation is None:
                 logger.debug(f"Invocation {invocation_id} not found")
                 return {
-                    "error": f"Invocation {invocation_id} not found"
+                    "message": f"Invocation {invocation_id} not found"
                 }, HTTPStatus.NOT_FOUND
 
             logger.debug(f"Found invocation: {invocation}")
@@ -190,7 +194,9 @@ class PredictAPIView(BaseApi):
             return {}, HTTPStatus.NO_CONTENT
         except Exception as e:
             logger.exception(f"Error in delete handler: {str(e)}")
-            return {"error": "Internal Server Error"}, HTTPStatus.INTERNAL_SERVER_ERROR
+            return {
+                "message": "Internal Server Error"
+            }, HTTPStatus.INTERNAL_SERVER_ERROR
 
     @expose("/", methods=["GET"])
     @protect()
@@ -206,4 +212,6 @@ class PredictAPIView(BaseApi):
             }, HTTPStatus.OK
         except Exception as e:
             logger.exception(f"Error in list handler: {str(e)}")
-            return {"error": "Internal Server Error"}, HTTPStatus.INTERNAL_SERVER_ERROR
+            return {
+                "message": "Internal Server Error"
+            }, HTTPStatus.INTERNAL_SERVER_ERROR

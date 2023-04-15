@@ -1,0 +1,528 @@
+{
+	"info": {
+		"_postman_id": "6eeb158e-a848-42e8-95dd-e117575cb079",
+		"name": "Product Recommendation API 🏦",
+		"description": "A simple REST API around a machine learning model that recommends banking productsRekognition on the back-end.\n\nContact Support:\n Name: kfrawee",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "18820922"
+	},
+	"item": [
+		{
+			"name": "predict",
+			"item": [
+				{
+					"name": "{invocation_id}",
+					"item": [
+						{
+							"name": "Retrieve invocation details by `invocation_id`",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/predict/:invocation_id",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"predict",
+										":invocation_id"
+									],
+									"variable": [
+										{
+											"key": "invocation_id",
+											"value": "<string>"
+										}
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "OK.",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/predict/:invocation_id",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"predict",
+												":invocation_id"
+											],
+											"variable": [
+												{
+													"key": "invocation_id"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"invocation_id\": \"<uuid>\",\n  \"invocation_status\": \"COMPLETED\",\n  \"created_on\": \"<string>\",\n  \"updated_on\": \"<string>\",\n  \"payload\": {},\n  \"predictions\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"_links\": {}\n}"
+								},
+								{
+									"name": "Invocation was not found.",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/predict/:invocation_id",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"predict",
+												":invocation_id"
+											],
+											"variable": [
+												{
+													"key": "invocation_id"
+												}
+											]
+										}
+									},
+									"status": "Not Found",
+									"code": 404,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"message\": \"<string>\"\n}"
+								},
+								{
+									"name": "Untitled Response",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/predict/:invocation_id",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"predict",
+												":invocation_id"
+											],
+											"variable": [
+												{
+													"key": "invocation_id"
+												}
+											]
+										}
+									},
+									"status": "Internal Server Error",
+									"code": 500,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"message\": \"<string>\"\n}"
+								}
+							]
+						},
+						{
+							"name": "Delete invocation record by `invocation_id`",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{bearerToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/predict/:invocation_id",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"predict",
+										":invocation_id"
+									],
+									"variable": [
+										{
+											"key": "invocation_id",
+											"value": "<string>"
+										}
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Deleted.",
+									"originalRequest": {
+										"method": "DELETE",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: bearer",
+												"key": "Authorization",
+												"value": "Bearer <token>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/predict/:invocation_id",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"predict",
+												":invocation_id"
+											],
+											"variable": [
+												{
+													"key": "invocation_id"
+												}
+											]
+										}
+									},
+									"status": "No Content",
+									"code": 204,
+									"_postman_previewlanguage": "text",
+									"header": [],
+									"cookie": [],
+									"body": ""
+								},
+								{
+									"name": "Invocation was not found.",
+									"originalRequest": {
+										"method": "DELETE",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: bearer",
+												"key": "Authorization",
+												"value": "Bearer <token>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/predict/:invocation_id",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"predict",
+												":invocation_id"
+											],
+											"variable": [
+												{
+													"key": "invocation_id"
+												}
+											]
+										}
+									},
+									"status": "Not Found",
+									"code": 404,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"message\": \"<string>\"\n}"
+								},
+								{
+									"name": "Untitled Response",
+									"originalRequest": {
+										"method": "DELETE",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: bearer",
+												"key": "Authorization",
+												"value": "Bearer <token>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/predict/:invocation_id",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"predict",
+												":invocation_id"
+											],
+											"variable": [
+												{
+													"key": "invocation_id"
+												}
+											]
+										}
+									},
+									"status": "Internal Server Error",
+									"code": 500,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"message\": \"<string>\"\n}"
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "Create prediction based on request body.",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"age\": \"<integer>\",\n  \"gender\": \"MALE\",\n  \"country_code\": \"<string>\",\n  \"city\": \"<string>\",\n  \"seniority\": \"<integer>\",\n  \"segment\": \"UNIVERSITY\",\n  \"relationship_type\": \"INACTIVE\",\n  \"activity_level\": \"INACTIVE\",\n  \"income\": \"<number>\"\n}",
+							"options": {
+								"raw": {
+									"headerFamily": "json",
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/predict",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"predict"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Prediction created successfully.",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"age\": \"<integer>\",\n  \"gender\": \"MALE\",\n  \"country_code\": \"<string>\",\n  \"city\": \"<string>\",\n  \"seniority\": \"<integer>\",\n  \"segment\": \"UNIVERSITY\",\n  \"relationship_type\": \"INACTIVE\",\n  \"activity_level\": \"INACTIVE\",\n  \"income\": \"<number>\"\n}",
+									"options": {
+										"raw": {
+											"headerFamily": "json",
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/predict",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"predict"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"invocation_id\": \"<uuid>\",\n  \"invocation_status\": \"RUNNING\",\n  \"created_on\": \"<string>\",\n  \"updated_on\": \"<string>\",\n  \"predictions\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"_links\": {}\n}"
+						},
+						{
+							"name": "Untitled Response",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"age\": \"<integer>\",\n  \"gender\": \"MALE\",\n  \"country_code\": \"<string>\",\n  \"city\": \"<string>\",\n  \"seniority\": \"<integer>\",\n  \"segment\": \"UNIVERSITY\",\n  \"relationship_type\": \"INACTIVE\",\n  \"activity_level\": \"INACTIVE\",\n  \"income\": \"<number>\"\n}",
+									"options": {
+										"raw": {
+											"headerFamily": "json",
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/predict",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"predict"
+									]
+								}
+							},
+							"status": "Internal Server Error",
+							"code": 500,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"message\": \"<string>\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Get all predictions.",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearerToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/predict",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"predict"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "List of all created predictions.",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"description": "Added as a part of security scheme: bearer",
+										"key": "Authorization",
+										"value": "Bearer <token>"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/predict",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"predict"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"count\": 16653880,\n  \"invocations\": [\n    {\n      \"invocation_id\": \"urn:uuid:36de5c82-71ad-0e16-33d1-8e1579f22660\",\n      \"invocation_status\": \"FAILED\",\n      \"created_on\": \"1957-02-13T13:16:24.834Z\",\n      \"updated_on\": \"1986-03-26T04:45:52.438Z\",\n      \"predictions\": [\n        \"minim id ullamco eu\",\n        \"irure in ut\"\n      ],\n      \"_links\": {}\n    }\n  ]\n}"
+						},
+						{
+							"name": "Untitled Response",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"description": "Added as a part of security scheme: bearer",
+										"key": "Authorization",
+										"value": "Bearer <token>"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/predict",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"predict"
+									]
+								}
+							},
+							"status": "Internal Server Error",
+							"code": 500,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"message\": \"<string>\"\n}"
+						}
+					]
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://127.0.0.1:8080/api/v1"
+		}
+	]
+}

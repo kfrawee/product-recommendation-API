@@ -13,7 +13,7 @@ def maybe_load_config():
         location = os.path.realpath(
             os.path.join(os.getcwd(), os.path.dirname(__file__))
         )
-        with open(os.path.join(location, f"{get_env()}.conf"), "r") as handle:
+        with open(os.path.join(location, f"{get_env().lower()}.conf"), "r") as handle:
             __CONFIG.read_file(handle)
     return __CONFIG
 
