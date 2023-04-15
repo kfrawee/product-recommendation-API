@@ -16,7 +16,7 @@ curl --location 'http://127.0.0.1:8080/api/v1/predict' \
     "city": "CAIRO",
     "seniority": 12,
     "segment": "INDIVIDUAL",
-    "relationship_type": "INACTIVE",
+    "relationship_type": "FORMER CUSTOMER",
     "activity_level": "INACTIVE",
     "income": 12000
 }'
