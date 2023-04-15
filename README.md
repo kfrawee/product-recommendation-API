@@ -14,3 +14,38 @@ The goal of this assignment is for us to assess your API building skills, and th
 ## Context on the problem
 
 What this model solves relates to a sub-product of Genify. It helps banks recommend the right banking product (loan, deposit, credit card, etc.) to the right client at the right time. How these recommendations are delivered is equally important. Here, to do so, we opt for a REST API, and your task is to build it!
+
+## How to run:
+- Clone the repository:
+    ```sh
+    $ git clone https://github.com/kfrawee/product-recommendation-API
+    ```
+- Train the model:
+    - Navigate to `app\api\ml_models`.
+    - After downloading and extracting the data to `data` directory. *Check `README.md` for guidance*
+    - Run `train.py` to train and save the trained model to `output` directory.
+- Run the server:
+    ```sh
+    $ python run.py
+    ```
+- Import Postman collection to test the API.
+- Some endpoints are protected ( i.e. `DELETE /predict/<invocation_id>` )
+    - To create an Admin user and get a Bearer token, run:
+        ```sh
+        $ sh scripts/get-token-dev.sh
+        ```
+    - Add the token to the request headers.
+
+Or using Docker Container:
+- Build:
+    ```sh
+    $ docker build -t genify-api .
+    ```
+- Run:
+    ```sh
+    $ docker run -p 8080:8080 genify-api
+    ```
+- Or run:
+    ```sh
+    $ sh scripts/build-run-image.sh
+    ```

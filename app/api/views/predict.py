@@ -1,9 +1,10 @@
 import logging
+from datetime import datetime, timezone
 from http import HTTPStatus
 from typing import Dict
-from uuid import uuid4
 
 import numpy as np
+import ulid
 import xgboost as xgb
 from flask import request
 from flask_appbuilder import expose
@@ -15,19 +16,12 @@ from app import db
 from app.api.db_models import Invocation
 from app.api.db_models.db_mixins import InvocationStatus
 from app.api.ml_models import load_model, processData, target_cols
-from app.api.views import (
-    BASE_USER_DATA_TEMPLATE,
-    INPUT_MAPPING,
-    PRODUCTS_MAPPINGS,
-    USER_ACTIVITY_MAPPING,
-    USER_GENDER_MAPPING,
-    USER_RELATIONSHIP_MAPPING,
-    USER_SEGMENT_MAPPING,
-    CreatePredictSchema,
-    PredictResponseSchema,
-    convert_values_to_string,
-    translate_keys_or_values,
-)
+from app.api.views import (BASE_USER_DATA_TEMPLATE, INPUT_MAPPING,
+                           PRODUCTS_MAPPINGS, USER_ACTIVITY_MAPPING,
+                           USER_GENDER_MAPPING, USER_RELATIONSHIP_MAPPING,
+                           USER_SEGMENT_MAPPING, CreatePredictSchema,
+                           PredictResponseSchema, convert_values_to_string,
+                           translate_keys_or_values)
 
 logger = logging.getLogger(__name__)
 model = load_model()
@@ -71,7 +65,7 @@ def prepare_data(data: Dict) -> Dict:
 
 
 class PredictAPIView(BaseApi):
-    resource_name = "predict"
+    base_route = "predict"
 
     @expose("/", methods=["POST"])
     def post_predict_handler(self, *args, **kwargs):
@@ -88,17 +82,17 @@ class PredictAPIView(BaseApi):
 
         logger.debug(f"Received valid data: {data}")
 
-        # create invocation record
-        invocation_id = str(uuid4())
-        invocation = Invocation(
-            invocation_id=invocation_id,
-            invocation_status=InvocationStatus.STARTED,
-            payload=data,
-        )
-        db.session.add(invocation)
-        db.session.commit()
 
         try:
+            # create invocation record
+            invocation_id = str(ulid.from_timestamp(datetime.now(timezone.utc)))
+            invocation = Invocation(
+                invocation_id=invocation_id,
+                invocation_status=InvocationStatus.STARTED,
+                payload=data,
+            )
+            db.session.add(invocation)
+            db.session.commit()
             prepared_data = prepare_data(data)
             logger.debug(f"Prepared data: {prepared_data}")
 
