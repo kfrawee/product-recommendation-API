@@ -1,0 +1,11 @@
+{
+    "age": 23,
+    "gender": "MALE",
+    "country_code": "EG",
+    "city": "CAIRO",
+    "seniority": 12,
+    "segment": "INDIVIDUAL",
+    "relationship_type": "INACIVE",
+    "activity_level": "INACTIVE",
+    "income": 12000
+}

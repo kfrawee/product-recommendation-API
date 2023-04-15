@@ -1,0 +1,11 @@
+{
+    "age": 33,
+    "gender": "FEMALE",
+    "country_code": "ES",
+    "city": "MADRID",
+    "seniority": 36,
+    "segment": "UNIVERSITY",
+    "relationship_type": "ACTIVE",
+    "activity_level": "ACTIVE",
+    "income": 55000
+}
